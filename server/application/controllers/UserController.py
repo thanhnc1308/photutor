@@ -7,7 +7,8 @@ user_controller = Blueprint("user_controller", __name__, url_prefix='/api/users'
 
 
 @user_controller.route('', methods=['GET'])
-def get_all():
+@verify_token
+def get_all(current_user):
     res = ServiceResponse()
     try:
         order_by = request.args.get('order_by', 'updated_at', type=str)
@@ -18,7 +19,8 @@ def get_all():
 
 
 @user_controller.route('/<string:id>', methods=['GET'])
-def get_by_id(id):
+@verify_token
+def get_by_id(current_user, id):
     res = ServiceResponse()
     try:
         res = user_service.get_by_id(id)
@@ -28,7 +30,8 @@ def get_by_id(id):
 
 
 @user_controller.route('/paging_filter', methods=['GET'])
-def get_paging():
+@verify_token
+def get_paging(current_user):
     res = ServiceResponse()
     try:
         order_by = request.args.get('order_by', 'updated_at', type=str)
@@ -42,7 +45,8 @@ def get_paging():
 
 
 @user_controller.route('', methods=['POST'])
-def add():
+@verify_token
+def add(current_user):
     res = ServiceResponse()
     try:
         parameters = request.json
@@ -53,7 +57,8 @@ def add():
 
 
 @user_controller.route('/<string:id>', methods=['PUT'])
-def update(id):
+@verify_token
+def update(current_user, id):
     res = ServiceResponse()
     try:
         parameters = request.json
@@ -64,7 +69,8 @@ def update(id):
 
 
 @user_controller.route('/<string:id>', methods=['DELETE'])
-def delete(id):
+@verify_token
+def delete(current_user, id):
     res = ServiceResponse()
     try:
         res = user_service.delete(id)

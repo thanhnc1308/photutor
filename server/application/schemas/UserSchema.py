@@ -3,12 +3,8 @@ from application.core.BaseSchema import BaseSchema, BaseListSchema
 from application.models.User import User
 
 
-class UserSchema(BaseSchema):
+class UserPublicSchema(BaseSchema):
     username = fields.Str(required=True)
-    password = fields.Str(required=True)
-    email = fields.Email(required=True)
-    facebook = fields.Str()
-    telegram = fields.Str()
 
     @post_load()
     def user_details_strip(self, data):
@@ -23,10 +19,16 @@ class UserSchema(BaseSchema):
             )
 
 
+class UserSchema(UserPublicSchema):
+    password = fields.Str(required=True)
+    email = fields.Email(required=True)
+
+
 class UserListSchema(BaseListSchema):
     items = fields.List(fields.Nested(UserSchema()))
 
 
+user_public_schema = UserPublicSchema()
 user_schema = UserSchema()
 users_schema = UserSchema(many=True)
 users_paging_schema = UserListSchema()

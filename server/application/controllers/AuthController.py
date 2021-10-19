@@ -1,10 +1,10 @@
-from flask import Blueprint, request
+from flask import Blueprint, request, current_app
 import jwt
 import json
 import datetime
 from application.core.ServiceResponse import ServiceResponse
 from application.models.User import User
-from application.schemas.UserSchema import user_schema
+from application.schemas.UserSchema import user_schema, user_public_schema
 
 auth_controller = Blueprint('auth_controller', __name__, url_prefix='/api/auth')
 
@@ -35,7 +35,7 @@ def register():
 
         new_user = User.create(**auth)
         if new_user:
-            res.on_success(data=user_schema.dump(new_user))
+            res.on_success(data=user_public_schema.dump(new_user))
         else:
             res.on_error(code=99, user_message='Error when create new user')
     except Exception as ex:
@@ -57,7 +57,7 @@ def login():
         # check if user exists
         user = User.get_by_username(username)
         if not user:
-            res.on_error(code=99, user_message='Username does not exist')
+            res.on_error(code=99, user_message='Password or password is not correct')
             return res.build()
 
         # check password here
@@ -65,13 +65,13 @@ def login():
             token = jwt.encode({
                 'user': username,  # it's better to return a public_id field here
                 'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=60*24*7)
-            }, 'SECRET_KEY')  # app.config['SECRET_KEY']
+            }, current_app.config['SECRET_KEY'], algorithm="HS256")
             if hasattr(token, 'decode'):
                 res.on_success(data=token.decode('UTF-8'))
             else:
                 res.on_success(data=token)
         else:
-            res.on_error(code=99, user_message='Password is not correct')
+            res.on_error(code=99, user_message='Password or password is not correct')
     except Exception as ex:
         res.on_exception(ex)
     return res.build()
@@ -83,10 +83,10 @@ def user_info():
     try:
         auth = json.loads(request.data)
         token = auth.get('token')
-        data = jwt.decode(token, options={"verify_signature": False})  # app.config['SECRET_KEY']
+        data = jwt.decode(token, current_app.config['SECRET_KEY'], algorithms=["HS256"])
         username = data.get('user')
         current_user = User.get_by_username(username)
-        res.on_success(data=user_schema.dump(current_user))
+        res.on_success(data=user_public_schema.dump(current_user))
     except Exception as ex:
         res.on_exception(ex)
     return res.build()

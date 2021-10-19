@@ -13,6 +13,7 @@ class Config(object):
     SQLALCHEMY_DATABASE_URI = (
         f"postgresql+psycopg2://{user}:{password}@{hostname}:{port}/{database}"
     )
+    SECRET_KEY = os.environ["SECRET_KEY"]
 
 
 class ProductionConfig(Config):

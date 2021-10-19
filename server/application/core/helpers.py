@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from flask import request, url_for, jsonify
+from flask import request, url_for, current_app
 import jwt
 from functools import wraps
 from application.models.User import User
@@ -15,8 +15,7 @@ def verify_token(f):
         if token is None:
             return {"message": "Token is missing"}, 401
         try:
-            # data = jwt.decode(token, 'SECRET_KEY')  # app.config['SECRET_KEY']
-            data = jwt.decode(token, options={"verify_signature": False})  # app.config['SECRET_KEY']
+            data = jwt.decode(token, current_app.config['SECRET_KEY'], algorithms=["HS256"])
             username = data.get('user')
             current_user = User.get_by_username(username)
             return f(user_schema.dump(current_user), *args, **kwargs)
