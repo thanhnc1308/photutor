@@ -6,3 +6,8 @@ from application.schemas.UserSchema import user_schema, users_schema, users_pagi
 class UserService(BaseService):
     model = User
     schema = user_schema
+    list_schema = users_schema
+    paging_schema = users_paging_schema
+
+
+user_service = UserService()

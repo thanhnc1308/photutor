@@ -9,7 +9,7 @@ class Config(object):
     password = os.environ["POSTGRES_PASSWORD"]
     hostname = os.environ["POSTGRES_HOSTNAME"]
     port = os.environ["POSTGRES_PORT"]
-    database = os.environ["APPLICATION_DB"]
+    database = os.environ["POSTGRES_DB"]
     SQLALCHEMY_DATABASE_URI = (
         f"postgresql+psycopg2://{user}:{password}@{hostname}:{port}/{database}"
     )

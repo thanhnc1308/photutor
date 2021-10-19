@@ -129,10 +129,10 @@ def create_initial_db():
     configure_app(os.getenv("APPLICATION_CONFIG"))
 
     try:
-        run_sql([f"CREATE DATABASE {os.getenv('APPLICATION_DB')}"])
+        run_sql([f"CREATE DATABASE {os.getenv('POSTGRES_DB')}"])
     except psycopg2.errors.DuplicateDatabase:
         print(
-            f"The database {os.getenv('APPLICATION_DB')} already exists and will not be recreated"
+            f"The database {os.getenv('POSTGRES_DB')} already exists and will not be recreated"
         )
 
 
@@ -158,7 +158,7 @@ def test(filenames):
     cmdline = docker_compose_cmdline("logs db")
     wait_for_logs(cmdline, "ready to accept connections")
 
-    run_sql([f"CREATE DATABASE {os.getenv('APPLICATION_DB')}"])
+    run_sql([f"CREATE DATABASE {os.getenv('POSTGRES_DB')}"])
 
     cmdline = ["pytest", "-svv", "--cov=application", "--cov-report=term-missing"]
     cmdline.extend(filenames)

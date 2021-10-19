@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify, make_response
+from flask import Blueprint, request
 import jwt
 import json
 import datetime
@@ -6,10 +6,10 @@ from application.core.ServiceResponse import ServiceResponse
 from application.models.User import User
 from application.schemas.UserSchema import user_schema
 
-auth_api = Blueprint('auth_api', __name__, url_prefix='/api/auth')
+auth_controller = Blueprint('auth_controller', __name__, url_prefix='/api/auth')
 
 
-@auth_api.route('/register', methods=['POST'])
+@auth_controller.route('/register', methods=['POST'])
 def register():
     res = ServiceResponse()
     try:
@@ -43,7 +43,7 @@ def register():
     return res.build()
 
 
-@auth_api.route('/login', methods=['POST'])
+@auth_controller.route('/login', methods=['POST'])
 def login():
     res = ServiceResponse()
     try:
@@ -66,12 +66,9 @@ def login():
                 'user': username,  # it's better to return a public_id field here
                 'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=60*24*7)
             }, 'SECRET_KEY')  # app.config['SECRET_KEY']
-            print('token', token)
             if hasattr(token, 'decode'):
-                print('token jwt')
                 res.on_success(data=token.decode('UTF-8'))
             else:
-                print('token string')
                 res.on_success(data=token)
         else:
             res.on_error(code=99, user_message='Password is not correct')
@@ -80,21 +77,16 @@ def login():
     return res.build()
 
 
-@auth_api.route('/user_info', methods=['POST'])
+@auth_controller.route('/user_info', methods=['POST'])
 def user_info():
     res = ServiceResponse()
     try:
         auth = json.loads(request.data)
         token = auth.get('token')
-
-        try:
-            data = jwt.decode(token, options={"verify_signature": False})  # app.config['SECRET_KEY']
-            username = data.get('user')
-            current_user = User.get_by_username(username)
-            print('current_user', user_schema.dump(current_user))
-            res.on_success(data=user_schema.dump(current_user))
-        except Exception as e:
-            res.on_success(data={})
+        data = jwt.decode(token, options={"verify_signature": False})  # app.config['SECRET_KEY']
+        username = data.get('user')
+        current_user = User.get_by_username(username)
+        res.on_success(data=user_schema.dump(current_user))
     except Exception as ex:
         res.on_exception(ex)
     return res.build()

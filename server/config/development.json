@@ -22,9 +22,5 @@
   {
     "name": "POSTGRES_PASSWORD",
     "value": "12345678"
-  },
-  {
-    "name": "APPLICATION_DB",
-    "value": "photo_study_clone"
   }
 ]

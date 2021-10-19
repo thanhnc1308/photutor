@@ -3,6 +3,7 @@ from flask_sqlalchemy import get_debug_queries
 from werkzeug.exceptions import default_exceptions
 from application.core.extensions import db, cors, jwt, migrate
 from application.controllers.UserController import user_controller
+from application.controllers.AuthController import auth_controller
 
 
 def create_app(config_name):
@@ -47,6 +48,7 @@ def configure_extensions(app):
 
 def configure_blueprint(app):
     app.register_blueprint(user_controller)
+    app.register_blueprint(auth_controller)
 
 
 def sql_debug(response):

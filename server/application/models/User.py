@@ -13,8 +13,6 @@ class User(BaseModel):
     username = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(100), unique=True, nullable=False)
     password = db.Column(db.String(500), nullable=False)
-    facebook = db.Column(db.String(100), unique=True)
-    telegram = db.Column(db.String(100), unique=True)
 
     # __mapper_args__ = {
     #     "order_by": username

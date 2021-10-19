@@ -18,7 +18,7 @@ services:
       dockerfile: Dockerfile
     environment:
       FLASK_ENV: ${FLASK_ENV}
-      APPLICATION_DB: ${APPLICATION_DB}
+      POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_HOSTNAME: ${POSTGRES_HOSTNAME}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
