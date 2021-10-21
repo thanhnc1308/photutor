@@ -1,34 +1,38 @@
 version: "3.3"
 
 services:
-#  db:
-#    image: postgres
-#    environment:
-#      POSTGRES_DB: ${POSTGRES_DB}
-#      POSTGRES_USER: ${POSTGRES_USER}
-#      POSTGRES_HOSTNAME: ${POSTGRES_HOSTNAME}
-#      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-#    ports:
-#      - "${POSTGRES_PORT}:5432"
-#    volumes:
-#      - pgdata:/var/lib/postgresql/data
-  web:
-    build:
-      context: ${PWD}
-      dockerfile: Dockerfile
+  photutor_db:
+    image: postgres
+    container_name: photutor_db1
     environment:
-      FLASK_APP: wsgi.py
-      FLASK_ENV: ${FLASK_ENV}
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_HOSTNAME: ${POSTGRES_HOSTNAME}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "${POSTGRES_PORT}:5432"
+    volumes:
+      - ${POSTGRES_VOLUME}:/var/lib/postgresql/data/
+  photutor_api:
+    container_name: photutor_api1
+    build:
+      context: ${PWD}
+      dockerfile: Dockerfile
+    environment:
+      FLASK_APP: ${FLASK_APP}
+      FLASK_ENV: ${FLASK_ENV}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_HOSTNAME: ${POSTGRES_HOSTNAME_LINKS}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_PORT: ${POSTGRES_PORT}
-      SECRET_KEY: SECRET_KEY
+      SECRET_KEY: ${SECRET_KEY}
     command: flask run --host 0.0.0.0 --port 5001
     volumes:
       - ${PWD}:/opt/code
     ports:
       - "5000:5000"
-#volumes:
-#  pgdata:
+    links:
+      - ${POSTGRES_HOSTNAME_LINKS}
+volumes:
+  pgdata:

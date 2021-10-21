@@ -30,4 +30,5 @@
 - Run with manage.py: 
   - ./manage.py flask run
 5. Build the image
-- FLASK_ENV="development" docker-compose -f docker/development.yml build web
+- docker-compose --env-file docker/.env.dev up
+- docker-compose --env-file docker/.env.dev up photutor_db
