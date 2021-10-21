@@ -26,7 +26,7 @@
 - Run with PyCharm
   - Script path: <PROJECT_DIR>/venv/bin/flask
   - Parameters: run
-  - Environment variables: PYTHONUNBUFFERED=1;FLASK_APP=wsgi.py;FLASK_ENV=development;FLASK_DEBUG=1;SQLALCHEMY_DATABASE_URI=postgresql+psycopg2://admin:12345678@Abc@localhost:5432/photo_study_clone;POSTGRES_DB=photo_study_clone;POSTGRES_USER=admin;POSTGRES_HOSTNAME=localhost;POSTGRES_PORT=5432;POSTGRES_PASSWORD=12345678;SECRET_KEY=SECRET_KEY
+  - Environment variables: PYTHONUNBUFFERED=1;FLASK_APP=wsgi.py;FLASK_ENV=development;FLASK_DEBUG=1;SQLALCHEMY_DATABASE_URI=postgresql+psycopg2://admin:12345678@Abc@localhost:5432/photutor;POSTGRES_DB=photutor;POSTGRES_USER=admin;POSTGRES_HOSTNAME=localhost;POSTGRES_PORT=5432;POSTGRES_PASSWORD=12345678;SECRET_KEY=SECRET_KEY
 - Run with manage.py: 
   - ./manage.py flask run
 5. Build the image
