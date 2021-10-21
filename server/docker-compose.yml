@@ -1,5 +1,9 @@
 version: "3.3"
 
+networks:
+  photutor:
+    driver: bridge
+
 services:
   photutor_db:
     image: postgres
@@ -13,6 +17,29 @@ services:
       - "${POSTGRES_PORT}:5432"
     volumes:
       - ${POSTGRES_VOLUME}:/var/lib/postgresql/data/
+    networks:
+      - photutor
+  photutor_redis:
+    image: redis
+    container_name: redis_container
+    command: redis-server --requirepass ${CACHE_REDIS_PASSWORD}
+#    environment:
+#      - REDIS_PASSWORD=${CACHE_REDIS_PASSWORD}
+    ports:
+      - "6379:6379"
+    volumes:
+      - ${REDIS_VOLUME}:/data
+#      - $PWD/redis.conf:/usr/local/etc/redis/redis.conf
+    networks:
+      - photutor
+  redis-commander:
+    container_name: redis-commander
+    hostname: redis-commander
+    image: rediscommander/redis-commander:latest
+    environment:
+      - REDIS_HOSTS=local:redis:6379
+    ports:
+      - "8081:8081"
   photutor_api:
     container_name: photutor_api1
     build:
@@ -34,5 +61,8 @@ services:
       - "5000:5000"
     links:
       - ${POSTGRES_HOSTNAME_LINKS}
+    networks:
+      - photutor
 volumes:
   pgdata:
+  redisdata:

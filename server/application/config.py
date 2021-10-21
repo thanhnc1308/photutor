@@ -14,6 +14,11 @@ class Config(object):
         f"postgresql+psycopg2://{user}:{password}@{hostname}:{port}/{database}"
     )
     SECRET_KEY = os.environ["SECRET_KEY"]
+    CACHE_REDIS_HOST = os.environ["CACHE_REDIS_HOST"]
+    CACHE_REDIS_PORT = os.environ["CACHE_REDIS_PORT"]
+    CACHE_REDIS_PASSWORD = os.environ["CACHE_REDIS_PASSWORD"]
+    CACHE_REDIS_DB = os.environ["CACHE_REDIS_DB"]
+
 
 
 class ProductionConfig(Config):

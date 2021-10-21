@@ -1,9 +1,10 @@
 from flask import Flask
 from flask_sqlalchemy import get_debug_queries
 from werkzeug.exceptions import default_exceptions
-from application.core.extensions import db, cors, jwt, migrate
+from application.core.extensions import db, cors, jwt, migrate, mem_cache, redis_cache
 from application.controllers.UserController import user_controller
 from application.controllers.AuthController import auth_controller
+from application.controllers.TestController import test_controller
 
 
 def create_app(config_name):
@@ -44,11 +45,26 @@ def configure_extensions(app):
     jwt.init_app(app)
     migrate.init_app(app, db)
     cors.init_app(app)
+    mem_cache.init_app(app, config={
+        'CACHE_TYPE': 'SimpleCache',
+        'CACHE_DEFAULT_TIMEOUT': 3600,
+        'CACHE_THRESHOLD': 100
+    })
+    redis_cache.init_app(app, config={
+        'CACHE_TYPE': 'RedisCache',
+        'CACHE_REDIS_HOST': app.config['CACHE_REDIS_HOST'],
+        'CACHE_REDIS_PORT': app.config['CACHE_REDIS_PORT'],
+        'CACHE_REDIS_PASSWORD': app.config['CACHE_REDIS_PASSWORD'],
+        # 'CACHE_REDIS_DB': 0,
+        # 'CACHE_KEY_PREFIX': 'test',
+        'CACHE_DEFAULT_TIMEOUT': 3600
+    })
 
 
 def configure_blueprint(app):
     app.register_blueprint(user_controller)
     app.register_blueprint(auth_controller)
+    app.register_blueprint(test_controller)
 
 
 def sql_debug(response):
