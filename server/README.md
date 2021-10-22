@@ -31,6 +31,6 @@
   - ./manage.py flask run
 5. Build the image
 - docker-compose --env-file docker/.env.dev up
-- docker-compose --env-file docker/.env.dev up photutor_db
+- docker-compose --env-file docker/.env.dev up photutor_db photutor_redis redis-commander
 6. Run command in container 
 - docker exec -it {CONTAINER_ID} sh
