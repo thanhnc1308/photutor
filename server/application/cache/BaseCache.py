@@ -6,15 +6,18 @@ import uuid
 import json
 import threading
 import os
-from enum import Enum
+from enum import IntEnum
 from application.cache.CacheType import CacheType
 from application.core.extensions import mem_cache, redis_cache
 
 
-class CacheLevel(Enum):
+class CacheLevel(IntEnum):
     MemCache = 1
     RedisCache = 2
     All = 3
+
+    def __str__(self):
+        return '%s' % self.value
 
 
 class BaseCache:
@@ -65,11 +68,11 @@ class BaseCache:
         if cache_config:
             key = self.generate_key(cache_config, param)
             cache_level = cache_config.get("CacheLevel")
-            if cache_level == CacheLevel.MemCache.value:
+            if cache_level == CacheLevel.MemCache:
                 ret = mem_cache.get(key)
-            elif cache_level == CacheLevel.RedisCache.value:
+            elif cache_level == CacheLevel.RedisCache:
                 ret = redis_cache.get(key)
-            elif cache_level == CacheLevel.All.value:
+            elif cache_level == CacheLevel.All:
                 ret = mem_cache.get(key)
                 if not ret:
                     ret = redis_cache.get(key)
@@ -80,15 +83,15 @@ class BaseCache:
         if cache_config:
             key = self.generate_key(cache_config, param)
             cache_level = cache_config.get("CacheLevel")
-            if cache_level == CacheLevel.MemCache.value:
+            if cache_level == CacheLevel.MemCache:
                 timeout = cache_config.get("ExpireTimeoutMem")
                 if not timeout:
                     timeout = cache_config.get("ExpireTimeout")
                 mem_cache.set(key, value, timeout)
-            elif cache_level == CacheLevel.RedisCache.value:
+            elif cache_level == CacheLevel.RedisCache:
                 timeout = cache_config.get("ExpireTimeout")
                 redis_cache.set(key, value, timeout)
-            elif cache_level == CacheLevel.All.value:
+            elif cache_level == CacheLevel.All:
                 timeout = cache_config.get("ExpireTimeout")
                 timeout_mem = cache_config.get("ExpireTimeoutMem")
                 if not timeout_mem:
@@ -101,11 +104,11 @@ class BaseCache:
         if cache_config:
             key = self.generate_key(cache_config, param)
             cache_level = cache_config.get("CacheLevel")
-            if cache_level == CacheLevel.MemCache.value:
+            if cache_level == CacheLevel.MemCache:
                 mem_cache.delete(key)
-            elif cache_level == CacheLevel.RedisCache.value:
+            elif cache_level == CacheLevel.RedisCache:
                 redis_cache.delete(key)
-            elif cache_level == CacheLevel.All.value:
+            elif cache_level == CacheLevel.All:
                 mem_cache.delete(key)
                 redis_cache.delete(key)
 
