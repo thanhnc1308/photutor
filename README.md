@@ -1,2 +1,1 @@
-# photutor
-A small project that I use to study ReactJS and Flask
+# A project template for ReactJS and Flask stack
