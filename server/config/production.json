@@ -5,7 +5,7 @@
   },
   {
     "name": "POSTGRES_DB",
-    "value": "photutor_production"
+    "value": "ncttemplate_production"
   },
   {
     "name": "POSTGRES_USER",

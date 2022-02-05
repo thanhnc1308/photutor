@@ -1,13 +1,13 @@
 version: "3.3"
 
 networks:
-  photutor:
+  ncttemplate:
     driver: bridge
 
 services:
-  photutor_db:
+  ncttemplate_db:
     image: postgres
-    container_name: photutor_db1
+    container_name: ncttemplate_db1
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
@@ -18,8 +18,8 @@ services:
     volumes:
       - ${POSTGRES_VOLUME}:/var/lib/postgresql/data/
     networks:
-      - photutor
-  photutor_redis:
+      - ncttemplate
+  ncttemplate_redis:
     image: redis
     container_name: redis_container
     command: redis-server --requirepass ${CACHE_REDIS_PASSWORD}
@@ -31,7 +31,7 @@ services:
       - ${REDIS_VOLUME}:/data
 #      - $PWD/redis.conf:/usr/local/etc/redis/redis.conf
     networks:
-      - photutor
+      - ncttemplate
   redis-commander:
     container_name: redis-commander
     hostname: redis-commander
@@ -40,8 +40,8 @@ services:
       - REDIS_HOSTS=local:redis:6379
     ports:
       - "8081:8081"
-  photutor_api:
-    container_name: photutor_api1
+  ncttemplate_api:
+    container_name: ncttemplate_api1
     build:
       context: ${PWD}
       dockerfile: Dockerfile
@@ -62,7 +62,7 @@ services:
     links:
       - ${POSTGRES_HOSTNAME_LINKS}
     networks:
-      - photutor
+      - ncttemplate
 volumes:
   pgdata:
   redisdata:

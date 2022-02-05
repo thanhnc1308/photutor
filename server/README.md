@@ -26,11 +26,11 @@
 - Run with PyCharm
   - Script path: <PROJECT_DIR>/venv/bin/flask
   - Parameters: run
-  - Environment variables: PYTHONUNBUFFERED=1;FLASK_APP=wsgi.py;FLASK_ENV=development;FLASK_DEBUG=1;SQLALCHEMY_DATABASE_URI=postgresql+psycopg2://admin:12345678@Abc@localhost:5432/photutor;POSTGRES_DB=photutor;POSTGRES_USER=admin;POSTGRES_HOSTNAME=localhost;POSTGRES_PORT=5432;POSTGRES_PASSWORD=12345678;SECRET_KEY=SECRET_KEY;CACHE_REDIS_HOST=0.0.0.0;CACHE_REDIS_PORT=6379;CACHE_REDIS_PASSWORD=123456;CACHE_REDIS_DB=0
+  - Environment variables: PYTHONUNBUFFERED=1;FLASK_APP=wsgi.py;FLASK_ENV=development;FLASK_DEBUG=1;SQLALCHEMY_DATABASE_URI=postgresql+psycopg2://admin:12345678@Abc@localhost:5432/ncttemplate;POSTGRES_DB=ncttemplate;POSTGRES_USER=admin;POSTGRES_HOSTNAME=localhost;POSTGRES_PORT=5432;POSTGRES_PASSWORD=12345678;SECRET_KEY=SECRET_KEY;CACHE_REDIS_HOST=0.0.0.0;CACHE_REDIS_PORT=6379;CACHE_REDIS_PASSWORD=123456;CACHE_REDIS_DB=0
 - Run with manage.py: 
   - ./manage.py flask run
 5. Build the image
 - docker-compose --env-file docker/.env.dev up
-- docker-compose --env-file docker/.env.dev up photutor_db photutor_redis redis-commander
+- docker-compose --env-file docker/.env.dev up ncttemplate_db ncttemplate_redis redis-commander
 6. Run command in container 
 - docker exec -it {CONTAINER_ID} sh
